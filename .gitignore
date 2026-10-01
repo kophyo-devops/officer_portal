@@ -24,3 +24,6 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Backend lives in a separate repo
+api/
