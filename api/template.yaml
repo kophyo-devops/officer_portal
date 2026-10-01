@@ -1,0 +1,167 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Officer Portal API - DynamoDB + S3 presigned PDF URLs
+
+Parameters:
+  CognitoUserPoolId:
+    Type: String
+  CognitoClientId:
+    Type: String
+  CorsOrigin:
+    Type: String
+    Default: http://localhost:5173
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 15
+    MemorySize: 256
+    Environment:
+      Variables:
+        DOCUMENTS_TABLE: !Ref DocumentsTable
+        S3_BUCKET_NAME: !Ref PdfBucket
+        CORS_ORIGIN: !Ref CorsOrigin
+        UPLOAD_URL_TTL_SECONDS: 300
+        DOWNLOAD_URL_TTL_SECONDS: 300
+
+Resources:
+  PdfBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, PUT, HEAD]
+            AllowedOrigins:
+              - !Ref CorsOrigin
+            MaxAge: 3000
+
+  DocumentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: documentId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: documentId
+          KeyType: HASH
+
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - !Ref CorsOrigin
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+      Auth:
+        DefaultAuthorizer: CognitoJwt
+        Authorizers:
+          CognitoJwt:
+            JwtConfiguration:
+              issuer: !Sub https://cognito-idp.${AWS::Region}.amazonaws.com/${CognitoUserPoolId}
+              audience:
+                - !Ref CognitoClientId
+            IdentitySource: $request.header.Authorization
+
+  DocumentsFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        EntryPoints:
+          - src/handlers/documents.ts
+        Minify: true
+        Target: es2020
+        Format: cjs
+        External:
+          - '@aws-sdk/*'
+    Properties:
+      Handler: documents.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DocumentsTable
+        - S3CrudPolicy:
+            BucketName: !Ref PdfBucket
+      Events:
+        ListDocs:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /documents
+            Method: GET
+        CreateDoc:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /documents
+            Method: POST
+        OptionsDocs:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /documents
+            Method: OPTIONS
+            Auth:
+              Authorizer: NONE
+
+  GetDocumentFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        EntryPoints:
+          - src/handlers/getDocument.ts
+        Minify: true
+        Target: es2020
+        Format: cjs
+        External:
+          - '@aws-sdk/*'
+    Properties:
+      Handler: getDocument.handler
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref DocumentsTable
+        - S3ReadPolicy:
+            BucketName: !Ref PdfBucket
+      Events:
+        GetById:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /documents/{id}
+            Method: GET
+            Auth:
+              Authorizer: NONE
+        OptionsGet:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /documents/{id}
+            Method: OPTIONS
+            Auth:
+              Authorizer: NONE
+
+Outputs:
+  ApiBaseUrl:
+    Description: Set this as VITE_API_BASE_URL in officer_portal/.env
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
+  PdfBucketName:
+    Value: !Ref PdfBucket
+  DocumentsTableName:
+    Value: !Ref DocumentsTable
