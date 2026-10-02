@@ -14,6 +14,73 @@ const statusLabel: Record<CargoDocument['status'], string> = {
   revoked: 'ပယ်ဖျက်',
 }
 
+function CopyLink({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false)
+
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(value)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1600)
+    } catch {
+      const input = document.createElement('textarea')
+      input.value = value
+      input.setAttribute('readonly', '')
+      input.style.position = 'fixed'
+      input.style.left = '-9999px'
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      document.body.removeChild(input)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1600)
+    }
+  }
+
+  return (
+    <div className="copy-link">
+      <code className="copy-link-value" title={value}>
+        {value}
+      </code>
+      <button
+        type="button"
+        className={`copy-link-btn${copied ? ' is-copied' : ''}`}
+        onClick={() => void copyLink()}
+        aria-label={copied ? 'Copied' : 'Copy link'}
+        title={copied ? 'Copied' : 'Copy'}
+      >
+        {copied ? (
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        ) : (
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            aria-hidden="true"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+        )}
+        <span>{copied ? 'Copied' : 'Copy'}</span>
+      </button>
+    </div>
+  )
+}
+
 function DetailRows({ doc }: { doc: CargoDocument }) {
   const rows = [
     { label: 'Document ID', value: doc.id },
@@ -147,7 +214,7 @@ export function VerifyPage() {
     <section className="verify-page">
       {user ? (
         <div className="form-panel verify-officer-bar">
-          <div className="verify-officer-main">
+          <div className="verify-officer-top">
             <div className="verify-officer-heading">
               <div>
                 <h1>စစ်ဆေးရေး ရလဒ်</h1>
@@ -168,23 +235,26 @@ export function VerifyPage() {
                 </Link>
               )}
             </div>
-
-            <div className="verify-officer-link">
-              <span className="verify-officer-link-label">Verify URL</span>
-              <code className="url-chip">{verifyUrl}</code>
-            </div>
           </div>
 
-          <div className="verify-officer-qr" aria-label="QR Code">
-            <div className="qr-box">
-              <QRCodeSVG
-                value={verifyUrl}
-                size={120}
-                level="M"
-                includeMargin={false}
-                bgColor="#ffffff"
-                fgColor="#1a1a1a"
-              />
+          <div className="verify-officer-share">
+            <div className="verify-officer-qr" aria-label="QR Code">
+              <div className="qr-box qr-box-sm">
+                <QRCodeSVG
+                  value={verifyUrl}
+                  size={112}
+                  level="M"
+                  includeMargin={false}
+                  bgColor="#ffffff"
+                  fgColor="#1a1a1a"
+                />
+              </div>
+              <span className="verify-officer-qr-label">QR</span>
+            </div>
+
+            <div className="verify-officer-link">
+              <span className="verify-officer-link-label">Verify link</span>
+              <CopyLink value={verifyUrl} />
             </div>
           </div>
         </div>
