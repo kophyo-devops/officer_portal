@@ -145,17 +145,20 @@ export function VerifyPage() {
 
   return (
     <section className="verify-page">
-      <div className="verify-hero">
-        <div className="verify-hero-text">
-          <h1>စစ်ဆေးရေး ရလဒ်</h1>
-          <p className="login-note">{doc.id}</p>
-        </div>
-        <div className="verify-hero-aside">
-          <span className={`verify-status status-${doc.status}`}>
-            {statusLabel[doc.status]}
-          </span>
-          {user && (
-            <div className="verify-hero-actions">
+      {user ? (
+        <div className="form-panel verify-officer-bar">
+          <div className="verify-officer-main">
+            <div className="verify-officer-heading">
+              <div>
+                <h1>စစ်ဆေးရေး ရလဒ်</h1>
+                <p className="login-note">{doc.id}</p>
+              </div>
+              <span className={`verify-status status-${doc.status}`}>
+                {statusLabel[doc.status]}
+              </span>
+            </div>
+
+            <div className="verify-officer-actions">
               <Link className="btn" to="/">
                 စာရင်းသို့
               </Link>
@@ -165,36 +168,42 @@ export function VerifyPage() {
                 </Link>
               )}
             </div>
-          )}
-        </div>
-      </div>
 
-      {isInvalid && (
-        <p className="error">
-          ဤစာရွက်ကို ပယ်ဖျက်ထားသည်။ ဖြတ်သန်းခွင့် မပေးပါနှင့်။
-        </p>
-      )}
+            <div className="verify-officer-link">
+              <span className="verify-officer-link-label">Verify URL</span>
+              <code className="url-chip">{verifyUrl}</code>
+            </div>
+          </div>
 
-      {user && (
-        <div className="form-panel verify-section">
-          <h2>QR Code (Officer)</h2>
-          <div className="verify-qr">
+          <div className="verify-officer-qr" aria-label="QR Code">
             <div className="qr-box">
               <QRCodeSVG
                 value={verifyUrl}
-                size={150}
+                size={120}
                 level="M"
                 includeMargin={false}
                 bgColor="#ffffff"
                 fgColor="#1a1a1a"
               />
             </div>
-            <div className="verify-qr-meta">
-              <p className="qr-caption">{doc.id}</p>
-              <code className="url-chip">{verifyUrl}</code>
-            </div>
           </div>
         </div>
+      ) : (
+        <div className="verify-hero">
+          <div className="verify-hero-text">
+            <h1>စစ်ဆေးရေး ရလဒ်</h1>
+            <p className="login-note">{doc.id}</p>
+          </div>
+          <span className={`verify-status status-${doc.status}`}>
+            {statusLabel[doc.status]}
+          </span>
+        </div>
+      )}
+
+      {isInvalid && (
+        <p className="error">
+          ဤစာရွက်ကို ပယ်ဖျက်ထားသည်။ ဖြတ်သန်းခွင့် မပေးပါနှင့်။
+        </p>
       )}
 
       <div className="form-panel verify-section">

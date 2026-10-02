@@ -754,18 +754,50 @@ code,
   min-width: 0;
 }
 
-.verify-hero-aside {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
+.verify-officer-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 20px;
+  align-items: start;
 }
 
-.verify-hero-actions {
+.verify-officer-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.verify-officer-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.verify-officer-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
   gap: 8px;
+}
+
+.verify-officer-link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.verify-officer-link-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.verify-officer-qr {
+  justify-self: end;
+}
+
+.verify-officer-qr .qr-box {
+  padding: 8px;
 }
 
 .verify-section h2 {
@@ -942,17 +974,22 @@ code,
     align-items: stretch;
   }
 
-  .verify-hero-aside {
+  .verify-officer-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .verify-officer-heading {
+    flex-direction: column;
     align-items: stretch;
   }
 
-  .verify-hero-actions {
-    justify-content: stretch;
-  }
-
-  .verify-hero-actions .btn {
+  .verify-officer-actions .btn {
     flex: 1;
     text-align: center;
+  }
+
+  .verify-officer-qr {
+    justify-self: start;
   }
 }
 
