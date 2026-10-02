@@ -132,7 +132,7 @@ export function DocumentsPage() {
                 <td>{doc.quantity}</td>
                 <td>{doc.issueDate}</td>
                 <td>
-                  <span className={`badge badge-${doc.status}`}>
+                  <span className={`status-text status-${doc.status}`}>
                     {statusLabel[doc.status]}
                   </span>
                 </td>

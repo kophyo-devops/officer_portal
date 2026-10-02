@@ -147,7 +147,7 @@ export function VerifyPage() {
           <h1>စစ်ဆေးရေး ရလဒ်</h1>
           <p className="login-note">{doc.id}</p>
         </div>
-        <span className={`badge badge-lg badge-${doc.status}`}>
+        <span className={`verify-status status-${doc.status}`}>
           {statusLabel[doc.status]}
         </span>
       </div>

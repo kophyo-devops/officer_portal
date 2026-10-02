@@ -443,34 +443,31 @@ code,
   font-size: 13px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 1px 6px;
-  border: 1px solid #4a5560;
-  background: #ffffff;
-  color: #1a1a1a;
-  font-size: 12px;
+.status-text {
+  font-size: 13px;
   font-weight: 600;
-  border-radius: 0;
-  line-height: 1.4;
+  color: var(--ink);
 }
 
-.badge-issued {
-  border-color: #2f5d3a;
-  color: #2f5d3a;
-  background: #ffffff;
+.status-issued {
+  color: #245c2e;
 }
 
-.badge-verified {
-  border-color: #1e3a5f;
+.status-verified {
   color: #1e3a5f;
-  background: #ffffff;
 }
 
-.badge-revoked {
-  border-color: #8a1c1c;
+.status-revoked {
   color: #8a1c1c;
-  background: #ffffff;
+}
+
+.verify-status {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .error {
@@ -641,15 +638,6 @@ code,
   min-width: 0;
 }
 
-.badge-lg {
-  padding: 4px 10px;
-  font-size: 13px;
-  font-weight: 700;
-  white-space: normal;
-  text-align: center;
-  border-width: 1.5px;
-}
-
 .verify-section h2 {
   padding-bottom: 8px;
   border-bottom: 1px solid var(--line);
@@ -764,10 +752,6 @@ code,
   .btn-block {
     width: auto;
     align-self: flex-start;
-  }
-
-  .badge-lg {
-    white-space: nowrap;
   }
 }
 
