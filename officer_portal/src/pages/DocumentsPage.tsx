@@ -137,44 +137,48 @@ export function DocumentsPage() {
                   </span>
                 </td>
                 <td>
-                  <div className="row-actions">
+                  <div className="row-actions" role="group" aria-label="လုပ်ဆောင်ချက်">
                     <Link
-                      className="icon-action"
+                      className="icon-action icon-action-view"
                       to={`/verify/${doc.id}`}
                       aria-label="ကြည့်ရန်"
                       title="ကြည့်ရန်"
                     >
                       <svg
                         viewBox="0 0 24 24"
-                        width="18"
-                        height="18"
+                        width="17"
+                        height="17"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="1.8"
+                        strokeWidth="1.7"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         aria-hidden="true"
                       >
-                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
-                        <circle cx="12" cy="12" r="3" />
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                        <circle cx="12" cy="12" r="2.75" />
                       </svg>
                     </Link>
                     {doc.status !== 'revoked' && (
                       <Link
-                        className="icon-action"
+                        className="icon-action icon-action-edit"
                         to={`/edit/${doc.id}`}
                         aria-label="ပြင်ရန်"
                         title="ပြင်ရန်"
                       >
                         <svg
                           viewBox="0 0 24 24"
-                          width="18"
-                          height="18"
+                          width="16"
+                          height="16"
                           fill="none"
                           stroke="currentColor"
-                          strokeWidth="1.8"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           aria-hidden="true"
                         >
                           <path d="M12 20h9" />
-                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
                         </svg>
                       </Link>
                     )}
