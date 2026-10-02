@@ -811,10 +811,6 @@ code,
   .verify-hero {
     align-items: stretch;
   }
-
-  .badge-lg {
-    width: 100%;
-  }
 }
 
 .pdf-viewer {
