@@ -755,24 +755,26 @@ code,
 }
 
 .verify-officer-bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 16px 20px;
-  align-items: start;
-}
-
-.verify-officer-main {
   display: flex;
   flex-direction: column;
+  gap: 14px;
+}
+
+.verify-officer-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 12px;
-  min-width: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
 }
 
 .verify-officer-heading {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
+  min-width: 0;
 }
 
 .verify-officer-actions {
@@ -781,10 +783,37 @@ code,
   gap: 8px;
 }
 
+.verify-officer-share {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px 16px;
+  align-items: center;
+}
+
+.verify-officer-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.verify-officer-qr-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.qr-box-sm {
+  width: 128px;
+  height: 128px;
+  padding: 6px;
+}
+
 .verify-officer-link {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  min-width: 0;
 }
 
 .verify-officer-link-label {
@@ -792,12 +821,55 @@ code,
   color: var(--muted);
 }
 
-.verify-officer-qr {
-  justify-self: end;
+.copy-link {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #f4f6f8;
+  overflow: hidden;
 }
 
-.verify-officer-qr .qr-box {
-  padding: 8px;
+.copy-link-value {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.copy-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: #fff;
+  color: #1e3a5f;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.copy-link-btn:hover {
+  background: #e8eef5;
+}
+
+.copy-link-btn.is-copied {
+  color: #245c2e;
+  background: #e7f4ea;
 }
 
 .verify-section h2 {
@@ -974,13 +1046,14 @@ code,
     align-items: stretch;
   }
 
-  .verify-officer-bar {
-    grid-template-columns: 1fr;
+  .verify-officer-top {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .verify-officer-heading {
-    flex-direction: column;
-    align-items: stretch;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .verify-officer-actions .btn {
@@ -988,8 +1061,20 @@ code,
     text-align: center;
   }
 
-  .verify-officer-qr {
-    justify-self: start;
+  .verify-officer-share {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .copy-link {
+    flex-direction: column;
+  }
+
+  .copy-link-btn {
+    justify-content: center;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 8px 12px;
   }
 }
 
