@@ -5,6 +5,7 @@ import { RequireAuth } from './components/RequireAuth'
 import { LoginPage } from './pages/LoginPage'
 import { DocumentsPage } from './pages/DocumentsPage'
 import { NewDocumentPage } from './pages/NewDocumentPage'
+import { EditDocumentPage } from './pages/EditDocumentPage'
 import { VerifyPage } from './pages/VerifyPage'
 
 export default function App() {
@@ -27,6 +28,14 @@ export default function App() {
               element={
                 <RequireAuth>
                   <NewDocumentPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/edit/:id"
+              element={
+                <RequireAuth>
+                  <EditDocumentPage />
                 </RequireAuth>
               }
             />

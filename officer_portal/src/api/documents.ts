@@ -119,6 +119,45 @@ export async function getDocumentApi(documentId: string) {
   )
 }
 
+export async function updateDocumentApi(
+  documentId: string,
+  input: {
+    truckPlate: string
+    cargoType: string
+    quantity: string
+    destination: string
+    issueDate: string
+    notes: string
+    replacePdf?: boolean
+    pdfFileName?: string
+    contentType?: string
+  },
+) {
+  return apiFetch<{
+    document: ApiDocument
+    uploadUrl?: string
+    previousPdfS3Key?: string
+  }>(`/documents/${encodeURIComponent(documentId)}`, {
+    method: 'PUT',
+    auth: true,
+    body: JSON.stringify(input),
+  })
+}
+
+export async function deletePreviousPdfApi(
+  documentId: string,
+  deletePdfKey: string,
+) {
+  return apiFetch<{ ok: boolean }>(
+    `/documents/${encodeURIComponent(documentId)}`,
+    {
+      method: 'PUT',
+      auth: true,
+      body: JSON.stringify({ deletePdfKey }),
+    },
+  )
+}
+
 export async function uploadPdfToS3(uploadUrl: string, file: File) {
   // Use ArrayBuffer so the browser does not auto-set Content-Type
   // (must match unsigned Lambda presigned PUT).

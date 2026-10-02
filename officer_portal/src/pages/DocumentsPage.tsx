@@ -138,6 +138,10 @@ export function DocumentsPage() {
                 </td>
                 <td>
                   <Link to={`/verify/${doc.id}`}>ကြည့်ရန်</Link>
+                  {' · '}
+                  {doc.status !== 'revoked' && (
+                    <Link to={`/edit/${doc.id}`}>ပြင်ရန်</Link>
+                  )}
                 </td>
               </tr>
             ))}

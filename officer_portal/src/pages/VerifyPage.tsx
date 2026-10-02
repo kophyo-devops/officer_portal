@@ -193,9 +193,16 @@ export function VerifyPage() {
             <div className="verify-qr-meta">
               <p className="qr-caption">{doc.id}</p>
               <code className="url-chip">{verifyUrl}</code>
-              <Link className="btn" to="/">
-                စာရင်းသို့
-              </Link>
+              <div className="actions">
+                <Link className="btn" to="/">
+                  စာရင်းသို့
+                </Link>
+                {doc.status !== 'revoked' && (
+                  <Link className="btn btn-primary" to={`/edit/${doc.id}`}>
+                    ပြင်ရန်
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </div>

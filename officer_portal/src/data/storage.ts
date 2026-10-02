@@ -136,6 +136,17 @@ export function addDocument(doc: CargoDocument): void {
   saveDocuments(docs)
 }
 
+export function updateLocalDocument(doc: CargoDocument): void {
+  const docs = loadDocuments()
+  const index = docs.findIndex((d) => d.id === doc.id)
+  if (index === -1) {
+    docs.unshift(doc)
+  } else {
+    docs[index] = doc
+  }
+  saveDocuments(docs)
+}
+
 export function nextDocumentId(): string {
   const year = new Date().getFullYear()
   const count = loadDocuments().length + 1
