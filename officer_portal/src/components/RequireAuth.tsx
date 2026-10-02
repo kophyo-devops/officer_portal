@@ -11,7 +11,11 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />
+    const from =
+      location.pathname.startsWith('/verify/') || location.pathname === '/login'
+        ? '/'
+        : location.pathname
+    return <Navigate to="/login" replace state={{ from }} />
   }
 
   return children

@@ -4,12 +4,14 @@ import { createDocumentApi, mapApiDocument, uploadPdfToS3 } from '../api/documen
 import { PdfDropzone } from '../components/PdfDropzone'
 import { isApiConfigured } from '../config/env'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import { savePdf } from '../data/pdfStore'
 import { addDocument, nextDocumentId } from '../data/storage'
 import type { CargoDocument } from '../types'
 
 export function NewDocumentPage() {
   const { user } = useAuth()
+  const { showToast } = useToast()
   const navigate = useNavigate()
 
   const [truckPlate, setTruckPlate] = useState('')
@@ -58,6 +60,7 @@ export function NewDocumentPage() {
         // keep a local copy for offline-ish verify fallback
         await savePdf(mapped.id, pdfFile)
         addDocument(mapped)
+        showToast('စာရွက် အသစ် သိမ်းပြီးပါပြီ')
         navigate(`/verify/${mapped.id}`)
         return
       }
@@ -78,9 +81,12 @@ export function NewDocumentPage() {
 
       await savePdf(doc.id, pdfFile)
       addDocument(doc)
+      showToast('စာရွက် အသစ် သိမ်းပြီးပါပြီ')
       navigate(`/verify/${doc.id}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'သိမ်း၍ မရပါ')
+      const message = err instanceof Error ? err.message : 'သိမ်း၍ မရပါ'
+      setError(message)
+      showToast(message, 'error')
     } finally {
       setSaving(false)
     }

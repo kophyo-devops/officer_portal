@@ -1,10 +1,19 @@
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 
 export function AppShell() {
   const { user, logout } = useAuth()
+  const { showToast } = useToast()
   const location = useLocation()
+  const navigate = useNavigate()
   const isPublicVerify = location.pathname.startsWith('/verify/')
+
+  async function onLogout() {
+    await logout()
+    showToast('ထွက်ပြီးပါပြီ', 'info')
+    navigate('/login', { replace: true })
+  }
 
   return (
     <div className="app-shell">
@@ -26,7 +35,7 @@ export function AppShell() {
                   type="button"
                   className="btn"
                   onClick={() => {
-                    void logout()
+                    void onLogout()
                   }}
                 >
                   ထွက်ရန်

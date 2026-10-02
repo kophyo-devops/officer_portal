@@ -9,6 +9,7 @@ import {
 } from '../api/documents'
 import { PdfDropzone } from '../components/PdfDropzone'
 import { isApiConfigured } from '../config/env'
+import { useToast } from '../context/ToastContext'
 import { savePdf } from '../data/pdfStore'
 import {
   getDocumentById,
@@ -19,6 +20,7 @@ import type { CargoDocument } from '../types'
 export function EditDocumentPage() {
   const { id = '' } = useParams()
   const navigate = useNavigate()
+  const { showToast } = useToast()
 
   const [truckPlate, setTruckPlate] = useState('')
   const [cargoType, setCargoType] = useState('')
@@ -134,6 +136,7 @@ export function EditDocumentPage() {
 
         const mapped = mapApiDocument(updated.document)
         updateLocalDocument(mapped)
+        showToast('စာရွက် ပြင်ဆင်ပြီးပါပြီ')
         navigate(`/verify/${mapped.id}`)
         return
       }
@@ -141,6 +144,7 @@ export function EditDocumentPage() {
       const existing = getDocumentById(id)
       if (!existing) {
         setError('Document မတွေ့ပါ')
+        showToast('Document မတွေ့ပါ', 'error')
         return
       }
 
@@ -158,9 +162,12 @@ export function EditDocumentPage() {
         await savePdf(id, pdfFile)
       }
       updateLocalDocument(doc)
+      showToast('စာရွက် ပြင်ဆင်ပြီးပါပြီ')
       navigate(`/verify/${doc.id}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'သိမ်း၍ မရပါ')
+      const message = err instanceof Error ? err.message : 'သိမ်း၍ မရပါ'
+      setError(message)
+      showToast(message, 'error')
     } finally {
       setSaving(false)
     }

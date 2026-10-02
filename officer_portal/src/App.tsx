@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { ToastProvider } from './context/ToastContext'
 import { AppShell } from './components/AppShell'
 import { RequireAuth } from './components/RequireAuth'
 import { LoginPage } from './pages/LoginPage'
@@ -12,37 +13,39 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route element={<AppShell />}>
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <DocumentsPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/new"
-              element={
-                <RequireAuth>
-                  <NewDocumentPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/edit/:id"
-              element={
-                <RequireAuth>
-                  <EditDocumentPage />
-                </RequireAuth>
-              }
-            />
-            <Route path="/verify/:id" element={<VerifyPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
+        <ToastProvider>
+          <Routes>
+            <Route element={<AppShell />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/"
+                element={
+                  <RequireAuth>
+                    <DocumentsPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/new"
+                element={
+                  <RequireAuth>
+                    <NewDocumentPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/edit/:id"
+                element={
+                  <RequireAuth>
+                    <EditDocumentPage />
+                  </RequireAuth>
+                }
+              />
+              <Route path="/verify/:id" element={<VerifyPage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+          </Routes>
+        </ToastProvider>
       </BrowserRouter>
     </AuthProvider>
   )

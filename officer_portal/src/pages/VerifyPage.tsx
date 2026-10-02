@@ -5,6 +5,7 @@ import { getDocumentApi, mapApiDocument } from '../api/documents'
 import { PdfViewer } from '../components/PdfViewer'
 import { isApiConfigured } from '../config/env'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import { getDocumentById } from '../data/storage'
 import type { CargoDocument } from '../types'
 
@@ -15,12 +16,14 @@ const statusLabel: Record<CargoDocument['status'], string> = {
 }
 
 function CopyLink({ value }: { value: string }) {
+  const { showToast } = useToast()
   const [copied, setCopied] = useState(false)
 
   async function copyLink() {
     try {
       await navigator.clipboard.writeText(value)
       setCopied(true)
+      showToast('Link ကူးယူပြီးပါပြီ')
       window.setTimeout(() => setCopied(false), 1600)
     } catch {
       const input = document.createElement('textarea')
@@ -33,6 +36,7 @@ function CopyLink({ value }: { value: string }) {
       document.execCommand('copy')
       document.body.removeChild(input)
       setCopied(true)
+      showToast('Link ကူးယူပြီးပါပြီ')
       window.setTimeout(() => setCopied(false), 1600)
     }
   }

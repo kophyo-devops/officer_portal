@@ -1,6 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import {
   getPasswordRuleResults,
   isPasswordValid,
@@ -77,9 +78,16 @@ export function LoginPage() {
     completeNewPassword,
     loading: authLoading,
   } = useAuth()
+  const { showToast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
-  const from = (location.state as { from?: string } | null)?.from ?? '/'
+  const rawFrom = (location.state as { from?: string } | null)?.from ?? '/'
+  const from =
+    !rawFrom ||
+    rawFrom === '/login' ||
+    rawFrom.startsWith('/verify/')
+      ? '/'
+      : rawFrom
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -144,6 +152,7 @@ export function LoginPage() {
       setLoading(false)
 
       if (result.status === 'signed_in') {
+        showToast('Login အောင်မြင်ပါပြီ')
         navigate(from, { replace: true })
         return
       }
@@ -158,6 +167,7 @@ export function LoginPage() {
     setLoading(false)
 
     if (result.status === 'signed_in') {
+      showToast('Login အောင်မြင်ပါပြီ')
       navigate(from, { replace: true })
       return
     }
