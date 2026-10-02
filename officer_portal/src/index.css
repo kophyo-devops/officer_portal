@@ -461,6 +461,30 @@ code,
   color: #8a1c1c;
 }
 
+.row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #1e3a5f;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #fff;
+  text-decoration: none;
+}
+
+.icon-action:hover {
+  background: #e8eef5;
+  border-color: #9eb0c4;
+}
+
 .verify-status {
   margin: 0;
   font-size: 14px;

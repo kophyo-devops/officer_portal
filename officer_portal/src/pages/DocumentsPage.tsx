@@ -137,11 +137,48 @@ export function DocumentsPage() {
                   </span>
                 </td>
                 <td>
-                  <Link to={`/verify/${doc.id}`}>ကြည့်ရန်</Link>
-                  {' · '}
-                  {doc.status !== 'revoked' && (
-                    <Link to={`/edit/${doc.id}`}>ပြင်ရန်</Link>
-                  )}
+                  <div className="row-actions">
+                    <Link
+                      className="icon-action"
+                      to={`/verify/${doc.id}`}
+                      aria-label="ကြည့်ရန်"
+                      title="ကြည့်ရန်"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        aria-hidden="true"
+                      >
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    </Link>
+                    {doc.status !== 'revoked' && (
+                      <Link
+                        className="icon-action"
+                        to={`/edit/${doc.id}`}
+                        aria-label="ပြင်ရန်"
+                        title="ပြင်ရန်"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                        </svg>
+                      </Link>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
