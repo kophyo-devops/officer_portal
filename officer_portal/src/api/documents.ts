@@ -120,15 +120,17 @@ export async function getDocumentApi(documentId: string) {
 }
 
 export async function uploadPdfToS3(uploadUrl: string, file: File) {
+  // Use ArrayBuffer so the browser does not auto-set Content-Type
+  // (must match unsigned Lambda presigned PUT).
   const response = await fetch(uploadUrl, {
     method: 'PUT',
-    headers: {
-      'Content-Type': file.type || 'application/pdf',
-    },
-    body: file,
+    body: await file.arrayBuffer(),
   })
 
   if (!response.ok) {
-    throw new Error(`S3 upload failed (${response.status})`)
+    const detail = await response.text().catch(() => '')
+    throw new Error(
+      `S3 upload failed (${response.status})${detail ? `: ${detail.slice(0, 200)}` : ''}`,
+    )
   }
 }
