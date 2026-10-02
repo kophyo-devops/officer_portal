@@ -65,6 +65,7 @@ export function VerifyPage() {
   const [doc, setDoc] = useState<CargoDocument | null>(() =>
     isApiConfigured ? null : getDocumentById(id) ?? null,
   )
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(isApiConfigured)
   const [error, setError] = useState<string | null>(null)
 
@@ -91,10 +92,12 @@ export function VerifyPage() {
 
       setLoading(true)
       setError(null)
+      setPdfUrl(null)
       try {
         const remote = await getDocumentApi(id)
         if (!active) return
         setDoc(mapApiDocument(remote.document))
+        setPdfUrl(remote.pdfUrl)
       } catch (err) {
         if (!active) return
         const local = getDocumentById(id)
@@ -168,6 +171,7 @@ export function VerifyPage() {
         <PdfViewer
           documentId={doc.id}
           fileName={doc.pdfFileName}
+          pdfUrl={pdfUrl}
           seedIfMissing={!isApiConfigured}
         />
       </div>

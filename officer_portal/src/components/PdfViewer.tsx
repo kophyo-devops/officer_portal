@@ -14,12 +14,15 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 interface PdfViewerProps {
   documentId: string
   fileName: string
+  /** When provided, skip a second API call (parent already fetched). */
+  pdfUrl?: string | null
   seedIfMissing?: boolean
 }
 
 export function PdfViewer({
   documentId,
   fileName,
+  pdfUrl: pdfUrlProp = null,
   seedIfMissing = false,
 }: PdfViewerProps) {
   const shellRef = useRef<HTMLDivElement | null>(null)
@@ -55,10 +58,25 @@ export function PdfViewer({
       setNumPages(0)
 
       try {
-        if (isApiConfigured) {
+        // Prefer URL from parent to avoid duplicate GET /documents/{id}
+        let remoteUrl = pdfUrlProp
+
+        if (!remoteUrl && isApiConfigured) {
           const remote = await getDocumentApi(documentId)
           if (!active) return
-          setFileUrl(remote.pdfUrl)
+          remoteUrl = remote.pdfUrl
+        }
+
+        if (remoteUrl) {
+          // Fetch once as blob — fewer range round-trips, faster page flips
+          const response = await fetch(remoteUrl)
+          if (!response.ok) {
+            throw new Error(`PDF download failed (${response.status})`)
+          }
+          const blob = await response.blob()
+          if (!active) return
+          objectUrl = URL.createObjectURL(blob)
+          setFileUrl(objectUrl)
           setLoading(false)
           return
         }
@@ -85,7 +103,6 @@ export function PdfViewer({
       } catch (err) {
         if (!active) return
 
-        // API fail → try local IndexedDB fallback
         try {
           const blob = await getPdf(documentId)
           if (!active) return
@@ -110,7 +127,7 @@ export function PdfViewer({
       active = false
       if (objectUrl) URL.revokeObjectURL(objectUrl)
     }
-  }, [documentId, seedIfMissing])
+  }, [documentId, pdfUrlProp, seedIfMissing])
 
   const fileSource = useMemo(() => fileUrl, [fileUrl])
 
@@ -127,6 +144,9 @@ export function PdfViewer({
           <div className="pdf-toolbar">
             <span className="login-note pdf-filename">{fileName}</span>
             <div className="pdf-pager">
+              <a className="btn" href={fileSource} download={fileName}>
+                Download
+              </a>
               <button
                 type="button"
                 className="btn"
@@ -159,8 +179,8 @@ export function PdfViewer({
               <Page
                 pageNumber={pageNumber}
                 width={containerWidth}
-                renderAnnotationLayer
-                renderTextLayer
+                renderAnnotationLayer={false}
+                renderTextLayer={false}
               />
             </Document>
           </div>
