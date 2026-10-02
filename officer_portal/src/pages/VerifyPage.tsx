@@ -9,9 +9,9 @@ import { getDocumentById } from '../data/storage'
 import type { CargoDocument } from '../types'
 
 const statusLabel: Record<CargoDocument['status'], string> = {
-  issued: 'ထုတ်ပေးပြီး / Valid',
+  issued: 'ထုတ်ပေးပြီး',
   verified: 'စစ်ဆေးပြီး',
-  revoked: 'ပယ်ဖျက် / Invalid',
+  revoked: 'ပယ်ဖျက်',
 }
 
 function DetailRows({ doc }: { doc: CargoDocument }) {

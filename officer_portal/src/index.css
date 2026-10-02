@@ -445,29 +445,32 @@ code,
 
 .badge {
   display: inline-block;
-  padding: 2px 8px;
-  border: 1px solid var(--line);
-  background: #f5f5f5;
+  padding: 1px 6px;
+  border: 1px solid #4a5560;
+  background: #ffffff;
+  color: #1a1a1a;
   font-size: 12px;
-  border-radius: 2px;
+  font-weight: 600;
+  border-radius: 0;
+  line-height: 1.4;
 }
 
 .badge-issued {
-  background: var(--ok-bg);
-  border-color: #b7d8be;
-  color: var(--ok);
+  border-color: #2f5d3a;
+  color: #2f5d3a;
+  background: #ffffff;
 }
 
 .badge-verified {
-  background: var(--info-bg);
-  border-color: #b9cbe0;
-  color: var(--info);
+  border-color: #1e3a5f;
+  color: #1e3a5f;
+  background: #ffffff;
 }
 
 .badge-revoked {
-  background: var(--warn-bg);
-  border-color: #e5b4b4;
-  color: var(--warn);
+  border-color: #8a1c1c;
+  color: #8a1c1c;
+  background: #ffffff;
 }
 
 .error {
@@ -639,11 +642,12 @@ code,
 }
 
 .badge-lg {
-  padding: 8px 12px;
+  padding: 4px 10px;
   font-size: 13px;
   font-weight: 700;
   white-space: normal;
   text-align: center;
+  border-width: 1.5px;
 }
 
 .verify-section h2 {
