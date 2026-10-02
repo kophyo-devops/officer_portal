@@ -7,6 +7,7 @@ import {
   updateDocumentApi,
   uploadPdfToS3,
 } from '../api/documents'
+import { PdfDropzone } from '../components/PdfDropzone'
 import { isApiConfigured } from '../config/env'
 import { savePdf } from '../data/pdfStore'
 import {
@@ -268,25 +269,15 @@ export function EditDocumentPage() {
               disabled={status === 'revoked'}
             />
           </label>
-
-          <label className="field">
-            <span className="field-label">
-              <span>Hardcopy PDF</span>
-              <span className="field-hint">optional — ပြောင်းမှ ရွေးပါ</span>
-            </span>
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
-              disabled={status === 'revoked'}
-            />
-            <span className="file-name">
-              {pdfFile
-                ? `အသစ်: ${pdfFile.name}`
-                : `လက်ရှိ: ${currentPdfName || '-'}`}
-            </span>
-          </label>
         </div>
+
+        <PdfDropzone
+          file={pdfFile}
+          onFileChange={setPdfFile}
+          disabled={status === 'revoked'}
+          hint="optional — ပြောင်းမှ ရွေးပါ"
+          currentFileName={currentPdfName || undefined}
+        />
 
         <label className="field">
           <span className="field-label">

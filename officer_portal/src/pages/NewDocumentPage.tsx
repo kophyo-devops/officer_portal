@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createDocumentApi, mapApiDocument, uploadPdfToS3 } from '../api/documents'
+import { PdfDropzone } from '../components/PdfDropzone'
 import { isApiConfigured } from '../config/env'
 import { useAuth } from '../context/AuthContext'
 import { savePdf } from '../data/pdfStore'
@@ -174,23 +175,13 @@ export function NewDocumentPage() {
               required
             />
           </label>
-
-          <label className="field">
-            <span className="field-label">
-              <span>
-                Hardcopy PDF
-                <span className="required">*</span>
-              </span>
-            </span>
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
-              required
-            />
-            {pdfFile && <span className="file-name">{pdfFile.name}</span>}
-          </label>
         </div>
+
+        <PdfDropzone
+          file={pdfFile}
+          onFileChange={setPdfFile}
+          required
+        />
 
         <label className="field">
           <span className="field-label">
