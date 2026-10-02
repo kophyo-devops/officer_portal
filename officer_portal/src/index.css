@@ -820,6 +820,34 @@ code,
   gap: 10px;
 }
 
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  color: var(--muted);
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--line);
+  border-top-color: var(--header);
+  border-radius: 50%;
+  animation: loading-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.loading-label {
+  font-size: 13px;
+}
+
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .pdf-toolbar {
   display: flex;
   align-items: center;

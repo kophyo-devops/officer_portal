@@ -3,6 +3,7 @@ import { Document, Page, pdfjs } from 'react-pdf'
 import { getDocumentApi } from '../api/documents'
 import { isApiConfigured } from '../config/env'
 import { ensureSamplePdf, getPdf } from '../data/pdfStore'
+import { LoadingState } from './LoadingState'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 
@@ -133,7 +134,7 @@ export function PdfViewer({
 
   return (
     <div ref={shellRef} className="pdf-viewer">
-      {loading && <p className="login-note">PDF ဖွင့်နေသည်...</p>}
+      {loading && <LoadingState label="Loading ....." />}
 
       {!loading && (error || !fileSource) && (
         <p className="error">{error ?? 'PDF မရှိပါ'}</p>
@@ -172,7 +173,7 @@ export function PdfViewer({
           <div className="pdf-canvas-wrap">
             <Document
               file={fileSource}
-              loading={<p className="login-note">Rendering...</p>}
+              loading={<LoadingState label="Loading ....." />}
               error={<p className="error">PDF ပြသ၍ မရပါ</p>}
               onLoadSuccess={({ numPages: total }) => setNumPages(total)}
             >
