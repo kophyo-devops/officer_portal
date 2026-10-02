@@ -150,9 +150,23 @@ export function VerifyPage() {
           <h1>စစ်ဆေးရေး ရလဒ်</h1>
           <p className="login-note">{doc.id}</p>
         </div>
-        <span className={`verify-status status-${doc.status}`}>
-          {statusLabel[doc.status]}
-        </span>
+        <div className="verify-hero-aside">
+          <span className={`verify-status status-${doc.status}`}>
+            {statusLabel[doc.status]}
+          </span>
+          {user && (
+            <div className="verify-hero-actions">
+              <Link className="btn" to="/">
+                စာရင်းသို့
+              </Link>
+              {doc.status !== 'revoked' && (
+                <Link className="btn btn-primary" to={`/edit/${doc.id}`}>
+                  ပြင်ရန်
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {isInvalid && (
@@ -160,21 +174,6 @@ export function VerifyPage() {
           ဤစာရွက်ကို ပယ်ဖျက်ထားသည်။ ဖြတ်သန်းခွင့် မပေးပါနှင့်။
         </p>
       )}
-
-      <div className="form-panel verify-section">
-        <h2>ကုန်တင်အချက်အလက်</h2>
-        <DetailRows doc={doc} />
-      </div>
-
-      <div className="form-panel verify-section">
-        <h2>Hardcopy PDF</h2>
-        <PdfViewer
-          documentId={doc.id}
-          fileName={doc.pdfFileName}
-          pdfUrl={pdfUrl}
-          seedIfMissing={!isApiConfigured}
-        />
-      </div>
 
       {user && (
         <div className="form-panel verify-section">
@@ -193,20 +192,25 @@ export function VerifyPage() {
             <div className="verify-qr-meta">
               <p className="qr-caption">{doc.id}</p>
               <code className="url-chip">{verifyUrl}</code>
-              <div className="actions">
-                <Link className="btn" to="/">
-                  စာရင်းသို့
-                </Link>
-                {doc.status !== 'revoked' && (
-                  <Link className="btn btn-primary" to={`/edit/${doc.id}`}>
-                    ပြင်ရန်
-                  </Link>
-                )}
-              </div>
             </div>
           </div>
         </div>
       )}
+
+      <div className="form-panel verify-section">
+        <h2>ကုန်တင်အချက်အလက်</h2>
+        <DetailRows doc={doc} />
+      </div>
+
+      <div className="form-panel verify-section">
+        <h2>Hardcopy PDF</h2>
+        <PdfViewer
+          documentId={doc.id}
+          fileName={doc.pdfFileName}
+          pdfUrl={pdfUrl}
+          seedIfMissing={!isApiConfigured}
+        />
+      </div>
     </section>
   )
 }
