@@ -182,7 +182,7 @@ export function LoginPage() {
           <p className="login-note">
             {needsNewPassword
               ? 'Temporary password ဖြင့် ပထမဆုံး ဝင်သည့်အတွက် password အသစ် သတ်မှတ်ပါ။'
-              : 'ရုံးတာဝန်ရှိ officer အကောင့်ဖြင့်သာ ဝင်ရောက်ပါ။'}
+              : 'Officer အကောင့်ဖြင့်သာ ဝင်ရောက်ပါ။'}
           </p>
         </div>
 
